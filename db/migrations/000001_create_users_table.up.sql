@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    picture TEXT,
+    access VARCHAR(20) NOT NULL DEFAULT 'user' CHECK (access IN ('user', 'admin')),
+    last_login TIMESTAMPTZ,
+    created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
