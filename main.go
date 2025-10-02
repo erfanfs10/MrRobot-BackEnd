@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/erfanfs10/MrRobot-BackEnd/db"
+	"github.com/erfanfs10/MrRobot-BackEnd/middlewares"
 	"github.com/erfanfs10/MrRobot-BackEnd/utils"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -14,6 +15,7 @@ func init() {
 
 func main() {
 	e := echo.New()
+	e.Use(middlewares.SeparateLogs())
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "MrRobot BackEnd")
 	})
