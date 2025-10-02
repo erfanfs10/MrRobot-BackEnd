@@ -1,9 +1,16 @@
 package main
 
 import (
+	"github.com/erfanfs10/MrRobot-BackEnd/db"
+	"github.com/erfanfs10/MrRobot-BackEnd/utils"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
+
+func init() {
+	utils.LoadEnv()
+	db.ConnectToDB()
+}
 
 func main() {
 	e := echo.New()
