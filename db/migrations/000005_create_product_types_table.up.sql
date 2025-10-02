@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS product_types (
+    id SERIAL PRIMARY KEY,
+    category_id INT,
+    title VARCHAR(50) NOT NULL UNIQUE,
+    image VARCHAR(255),
+    created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL
+);
