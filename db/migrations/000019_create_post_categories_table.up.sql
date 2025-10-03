@@ -1,0 +1,7 @@
+CREATE TABLE post_categories (
+    post_id BIGINT NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
+    category_id INT NOT NULL REFERENCES categories (id) ON DELETE CASCADE,
+    created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (post_id, category_id)
+);
