@@ -32,5 +32,7 @@ func main() {
 	})
 
 	routes.BrandRoutes(e.Group("api/brands/"))
+	routes.CategoryRoutes(e.Group("api/categories/"))
+
 	e.Logger.Fatal(e.Start(":8080"))
 }
