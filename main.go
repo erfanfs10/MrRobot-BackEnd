@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/erfanfs10/MrRobot-BackEnd/db"
 	"github.com/erfanfs10/MrRobot-BackEnd/middlewares"
+	"github.com/erfanfs10/MrRobot-BackEnd/routes"
 	"github.com/erfanfs10/MrRobot-BackEnd/utils"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -19,5 +20,6 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "MrRobot BackEnd")
 	})
-	e.Logger.Fatal(e.Start(":1323"))
+	routes.BrandRoutes(e.Group("api/brands/"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
