@@ -37,6 +37,7 @@ func main() {
 	routes.ProductTypeRoutes(e.Group("api/product-types/"))
 	routes.ProductRoutes(e.Group("api/products/"))
 	routes.WishListRoutes(e.Group("api/wishlists/"))
+	routes.AddressRoutes(e.Group("api/addresses/"))
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
