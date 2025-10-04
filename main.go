@@ -18,6 +18,7 @@ func init() {
 
 func main() {
 	e := echo.New()
+	e.Validator = utils.CreateCustomValidator()
 
 	e.Use(middlewares.CustomLogger())
 	e.Use(middlewares.SeparateLogs())
