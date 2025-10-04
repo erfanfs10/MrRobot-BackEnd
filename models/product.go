@@ -34,6 +34,7 @@ type ProductDetail struct {
 	Rates               []Rates         `json:"rates"`
 	Images              []ProductImages `json:"produc_images"`
 	Attributes          []Attributes    `json:"attributes"`
+	Posts               []Post          `json:"posts"`
 	WishListsProductIDs []int           `json:"wishlist_product_ids"`
 }
 

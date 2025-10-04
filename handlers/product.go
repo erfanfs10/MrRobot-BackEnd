@@ -103,10 +103,13 @@ func ProductListSell(c echo.Context) error {
 func ProductDetail(c echo.Context) error {
 	product_title := c.Param("title")
 
+	userID := c.Request().Header.Get("user_id")
+
 	product := models.ProductDetail{}
 	rates := []models.Rates{}
 	images := []models.ProductImages{}
 	attributes := []models.Attributes{}
+	posts := []models.Post{}
 	wishListItemsProductIDs := []int{}
 
 	err := db.DB.Get(&product, queries.ProductDetail, product_title)
@@ -145,9 +148,38 @@ func ProductDetail(c echo.Context) error {
 			err, "server error")
 	}
 
+	postListQuery := queries.BuildPostListQuery("product", *product.Category)
+	err = db.DB.Select(&posts, postListQuery)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return utils.HandleError(c, http.StatusNotFound, err, "post not found")
+		}
+		return utils.HandleError(c, http.StatusInternalServerError,
+			err, "server error")
+	}
+
+	if userID != "" {
+		var wishListID int
+		// get the wishlist id from db for current user
+		err := db.DB.Get(&wishListID, queries.GetWishListIDCurrentUser, userID)
+		if err != nil {
+			errText := fmt.Sprintf("can not get wishlist for user : %v", userID)
+			c.Set("err", errText)
+		}
+		// get the product id's of wishlist items for current wishlist id
+		err = db.DB.Select(&wishListItemsProductIDs, queries.GetWishListItemsProductIDs, wishListID)
+		if err != nil {
+			errText := fmt.Sprintf("can not get wish list product ids for user :%v", userID)
+			c.Set("err", errText)
+		}
+	} else {
+		c.Set("err", "user id did not send")
+	}
+
 	product.Rates = rates
 	product.Images = images
 	product.Attributes = attributes
+	product.Posts = posts
 	product.WishListsProductIDs = wishListItemsProductIDs
 
 	_, err = db.DB.Exec(queries.ProductUpdateView, product_title)
