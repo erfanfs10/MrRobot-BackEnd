@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/erfanfs10/MrRobot-BackEnd/db"
@@ -97,4 +98,62 @@ func ProductListSell(c echo.Context) error {
 			err, "server error")
 	}
 	return c.JSON(http.StatusOK, products)
+}
+
+func ProductDetail(c echo.Context) error {
+	product_title := c.Param("title")
+
+	product := models.ProductDetail{}
+	rates := []models.Rates{}
+	images := []models.ProductImages{}
+	attributes := []models.Attributes{}
+	wishListItemsProductIDs := []int{}
+
+	err := db.DB.Get(&product, queries.ProductDetail, product_title)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
+		}
+		return utils.HandleError(c, http.StatusInternalServerError,
+			err, "server error")
+	}
+
+	err = db.DB.Select(&rates, queries.Rates, *product.ID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
+		}
+		return utils.HandleError(c, http.StatusInternalServerError,
+			err, "server error")
+	}
+
+	err = db.DB.Select(&images, queries.ProductImages, *product.ID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
+		}
+		return utils.HandleError(c, http.StatusInternalServerError,
+			err, "server error")
+	}
+
+	err = db.DB.Select(&attributes, queries.Attributes, *product.ID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
+		}
+		return utils.HandleError(c, http.StatusInternalServerError,
+			err, "server error")
+	}
+
+	product.Rates = rates
+	product.Images = images
+	product.Attributes = attributes
+	product.WishListsProductIDs = wishListItemsProductIDs
+
+	_, err = db.DB.Exec(queries.ProductUpdateView, product_title)
+	if err != nil {
+		errText := fmt.Sprintf("can not update view for product : %v", product_title)
+		c.Set("err", errText)
+	}
+	return c.JSON(http.StatusOK, product)
 }

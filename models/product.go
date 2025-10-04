@@ -23,3 +23,20 @@ type Product struct {
 	ProductType      *string `json:"product_type" db:"product_type"`
 	ProductTypeFarsi *string `json:"product_type_farsi" db:"product_type_farsi"`
 }
+
+type ProductIDs struct {
+	ProductIDs []int `json:"id" db:"id"`
+}
+
+type ProductDetail struct {
+	Product
+	Point               *string         `json:"point" db:"point"`
+	Rates               []Rates         `json:"rates"`
+	Images              []ProductImages `json:"produc_images"`
+	Attributes          []Attributes    `json:"attributes"`
+	WishListsProductIDs []int           `json:"wishlist_product_ids"`
+}
+
+type ProductID struct {
+	ProductID int `json:"product_id" db:"product_id"`
+}
