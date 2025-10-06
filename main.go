@@ -39,6 +39,7 @@ func main() {
 	routes.WishListRoutes(e.Group("api/wishlists/"))
 	routes.AddressRoutes(e.Group("api/addresses/"))
 	routes.PostRoutes(e.Group("api/posts/"))
+	routes.UserRoutes(e.Group("api/users/"))
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
