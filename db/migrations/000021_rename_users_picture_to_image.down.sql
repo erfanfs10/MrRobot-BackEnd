@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE users RENAME COLUMN image TO picture;
+
+COMMIT;
