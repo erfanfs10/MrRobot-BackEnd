@@ -8,8 +8,8 @@ const (
 	`
 
 	UserCreate = `
-		INSERT INTO users(name,email)
-			VALUES($1,$2)
+		INSERT INTO users(name,email,image)
+			VALUES($1,$2,$3)
 		RETURNING id;
 	`
 

@@ -31,7 +31,7 @@ func UserGetORCreate(c echo.Context) error {
 
 			// create user if not exists
 			err := db.DB.Get(&getORCreatedUserID, queries.UserCreate,
-				getORCreate.Name, getORCreate.Email)
+				getORCreate.Name, getORCreate.Email, getORCreate.Image)
 
 			if err != nil {
 				return utils.HandleError(c, http.StatusInternalServerError,
