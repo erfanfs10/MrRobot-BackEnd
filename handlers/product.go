@@ -102,7 +102,6 @@ func ProductListSell(c echo.Context) error {
 
 func ProductDetail(c echo.Context) error {
 	product_title := c.Param("title")
-
 	userID := c.Request().Header.Get("user_id")
 
 	product := models.ProductDetail{}
@@ -124,7 +123,7 @@ func ProductDetail(c echo.Context) error {
 	err = db.DB.Select(&rates, queries.Rates, *product.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
+			return utils.HandleError(c, http.StatusNotFound, err, "rates not found")
 		}
 		return utils.HandleError(c, http.StatusInternalServerError,
 			err, "server error")
@@ -133,7 +132,7 @@ func ProductDetail(c echo.Context) error {
 	err = db.DB.Select(&images, queries.ProductImages, *product.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
+			return utils.HandleError(c, http.StatusNotFound, err, "images not found")
 		}
 		return utils.HandleError(c, http.StatusInternalServerError,
 			err, "server error")
@@ -142,7 +141,7 @@ func ProductDetail(c echo.Context) error {
 	err = db.DB.Select(&attributes, queries.Attributes, *product.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
+			return utils.HandleError(c, http.StatusNotFound, err, "attributes not found")
 		}
 		return utils.HandleError(c, http.StatusInternalServerError,
 			err, "server error")

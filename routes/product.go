@@ -12,4 +12,5 @@ func ProductRoutes(g *echo.Group) {
 	g.GET("new/", handlers.ProductListNew)
 	g.GET("view/", handlers.ProductListView)
 	g.GET("sell/", handlers.ProductListSell)
+	g.GET(":title/", handlers.ProductDetail)
 }
