@@ -114,7 +114,17 @@ func AddressUpdate(c echo.Context) error {
 		return utils.HandleError(c, http.StatusBadRequest, errors.New(err), "address not found")
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{"message": "address updated"})
+	updatedAdress := models.Address{}
+	err = db.DB.Get(&updatedAdress, queries.AddressGet, addressID, userID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return utils.HandleError(c, http.StatusNotFound, err, "address not found")
+		}
+		return utils.HandleError(c, http.StatusInternalServerError,
+			err, "server error")
+	}
+
+	return c.JSON(http.StatusOK, updatedAdress)
 }
 
 func AddressDelete(c echo.Context) error {
