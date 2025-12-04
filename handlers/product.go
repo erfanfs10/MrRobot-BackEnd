@@ -25,6 +25,17 @@ func ProductListProductType(c echo.Context) error {
 		return utils.HandleError(c, http.StatusInternalServerError,
 			err, "server error")
 	}
+
+	for i, v := range products {
+		attrModel := []models.Attributes{}
+		err = db.DB.Select(&attrModel, queries.Attributes, *v.ID)
+		if err != nil {
+			errText := fmt.Sprintf("can not get attributes for product : %v", v.Title)
+			c.Set("err", errText)
+		}
+		products[i].Attributes = attrModel
+	}	
+
 	return c.JSON(http.StatusOK, products)
 }
 
