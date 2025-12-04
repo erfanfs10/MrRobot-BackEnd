@@ -40,6 +40,7 @@ func main() {
 	routes.AddressRoutes(e.Group("api/addresses/"))
 	routes.PostRoutes(e.Group("api/posts/"))
 	routes.UserRoutes(e.Group("api/users/"))
+	routes.FilterRoutes(e.Group("api/filters/"))
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
