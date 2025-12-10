@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"net/http"
 	"os"
+	"strings"
 )
 
 func init() {
@@ -23,6 +24,16 @@ func main() {
 	e.Use(middlewares.CustomLogger())
 	e.Use(middlewares.SeparateLogs())
 	e.Use(middleware.Recover())
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: strings.Split(utils.GetEnv("ALLOWED_CORS"), ","),
+		AllowMethods: []string{echo.GET, echo.POST,
+			echo.PUT, echo.PATCH, echo.DELETE},
+		AllowHeaders: []string{echo.HeaderOrigin,
+			echo.HeaderContentType, echo.HeaderAccept,
+			echo.HeaderAuthorization},
+		AllowCredentials: true, // This is critical for allowing cookies and credentials
+	}))
 
 	if os.Args[len(os.Args)-1] == "dev" {
 		e.Static("static", "../")
@@ -41,6 +52,7 @@ func main() {
 	routes.PostRoutes(e.Group("api/posts/"))
 	routes.UserRoutes(e.Group("api/users/"))
 	routes.FilterRoutes(e.Group("api/filters/"))
+	routes.SearchRoute(e.Group("api/search/"))
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
