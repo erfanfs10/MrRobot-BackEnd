@@ -3,7 +3,6 @@ package handlers
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/erfanfs10/MrRobot-BackEnd/db"
@@ -15,7 +14,6 @@ import (
 
 func Search(c echo.Context) error {
 	q := c.QueryParam("q")
-	fmt.Println(q)
 
 	products := []models.Product{}
 	err := db.DB.Select(&products, queries.SearchProduct, "%"+q+"%")
