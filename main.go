@@ -53,6 +53,7 @@ func main() {
 	routes.UserRoutes(e.Group("api/users/"))
 	routes.FilterRoutes(e.Group("api/filters/"))
 	routes.SearchRoute(e.Group("api/search/"))
+	routes.OrderRoutes(e.Group("api/orders/"))
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
