@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type Product struct {
 	ID               *int         `json:"id" db:"product_id"`
 	Title            *string      `json:"title" db:"product_title"`
@@ -13,6 +15,8 @@ type Product struct {
 	Discount         *string      `json:"discount" db:"product_discount"`
 	NetPrice         *string      `json:"net_price" db:"product_net_price"`
 	Stock            *int         `json:"stock" db:"product_stock"`
+	View             *int         `json:"view" db:"product_view"`
+	Sell             *int         `json:"sell" db:"product_sell"`
 	Variant          *string      `json:"variant" db:"product_variant"`
 	VariantFarsi     *string      `json:"variant_farsi" db:"product_variant_farsi"`
 	PrimaryImage     *string      `json:"primary_image" db:"primary_image"`
@@ -22,6 +26,7 @@ type Product struct {
 	CategoryFarsi    *string      `json:"category_farsi" db:"category_farsi"`
 	ProductType      *string      `json:"product_type" db:"product_type"`
 	ProductTypeFarsi *string      `json:"product_type_farsi" db:"product_type_farsi"`
+	Created          *time.Time   `json:"created" db:"product_created"`
 	Attributes       []Attributes `json:"attributes"`
 }
 

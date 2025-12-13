@@ -24,9 +24,12 @@ func BuildProductPTCBQuery(filterBy string) string {
             p.discount AS product_discount,
             p.net_price AS product_net_price,
             p.stock AS product_stock,
+			p.view AS product_view,
+			p.sell AS product_sell,
             p.variant AS product_variant,
             p.variant_farsi AS product_variant_farsi,
             p.color_code AS product_color_code,
+			p.created AS product_created,
             b.title AS brand,
             b.title_farsi AS brand_farsi,
             c.title AS category,
@@ -73,9 +76,12 @@ func BuildProductListQuery(filterBy string) string {
             p.discount AS product_discount,
             p.net_price AS product_net_price,
             p.stock AS product_stock,
+			p.view AS product_view,
+			p.sell AS product_sell,
             p.variant AS product_variant,
             p.variant_farsi AS product_variant_farsi,
             p.color_code AS product_color_code,
+			p.created AS product_created,
 			b.title AS brand,
 			b.title_farsi AS brand_farsi,
 			c.title AS category,
@@ -108,6 +114,11 @@ const (
 		WHERE title=$1;
 	`
 
+	ProductUpdateSell = `
+		UPDATE products SET sell=sell+$1
+		WHERE id=$2;
+	`
+
 	ProductDetail = `
 		SELECT 
 			p.id AS product_id,
@@ -121,9 +132,12 @@ const (
             p.discount AS product_discount,
             p.net_price AS product_net_price,
             p.stock AS product_stock,
+			p.view AS product_view,
+			p.sell AS product_sell,
             p.variant AS product_variant,
             p.variant_farsi AS product_variant_farsi,
             p.color_code AS product_color_code,
+			p.created AS product_created,
 			b.title AS brand,
 			b.title_farsi AS brand_farsi,
 			c.title AS category,
