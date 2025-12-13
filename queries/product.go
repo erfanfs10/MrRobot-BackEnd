@@ -48,7 +48,7 @@ func BuildProductPTCBQuery(filterBy string) string {
             LIMIT 1
         ) pi ON TRUE
         WHERE %s = $1
-		ORDER BY p.discount DESC, p.status='available' DESC;
+		ORDER BY p.discount DESC, p.status='available' DESC, p.status='comingSoon' DESC;
     `
 
 	return fmt.Sprintf(baseQuery, column)
