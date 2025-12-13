@@ -53,7 +53,8 @@ const (
 			WHERE oi.order_id = o.id
 		) oi ON TRUE
 
-		WHERE o.user_id = $1;
+		WHERE o.user_id = $1
+		ORDER BY o.created DESC;
 
 	`
 )
