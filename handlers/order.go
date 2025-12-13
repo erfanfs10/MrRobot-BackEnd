@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/erfanfs10/MrRobot-BackEnd/db"
@@ -32,8 +34,7 @@ func OrderCreate(c echo.Context) error {
 	}
 
 	for _,v := range(*orderCreate.Cart) {
-		price := *orderCreate.ShippingPrice + *orderCreate.TotalProducts
-		_, err := db.DB.Exec(queries.OrderItemsCreate, newOrderID, v.ID, v.Quantity, price)
+		_, err := db.DB.Exec(queries.OrderItemsCreate, newOrderID, v.ID, v.Quantity, v.NetPrice)
 		if err != nil {
 			return utils.HandleError(c, http.StatusInternalServerError,
 			err, "server error")
@@ -42,4 +43,21 @@ func OrderCreate(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, echo.Map{"message": "created"})
 
+}
+
+func OrderList(c echo.Context) error {
+	userID := c.Get("userID")
+
+	orders := []models.Order{}
+
+	err := db.DB.Select(&orders, queries.OrderList, userID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return utils.HandleError(c, http.StatusNotFound, err, "orders not found")
+		}
+		return utils.HandleError(c, http.StatusInternalServerError,
+			err, "server error")
+	}
+
+	return c.JSON(http.StatusOK, orders)
 }

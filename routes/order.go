@@ -8,4 +8,5 @@ import (
 
 func OrderRoutes(g *echo.Group) {
 	g.POST("", handlers.OrderCreate, middlewares.Authenticate())
+	g.GET("my/", handlers.OrderList, middlewares.Authenticate())
 }
