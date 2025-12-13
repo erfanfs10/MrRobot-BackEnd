@@ -21,6 +21,7 @@ const (
 			o.total_amount AS order_total_amount,
 			o.status AS order_status,
 			o.tracking_number AS order_tracking_number,
+			o.created AS order_created,
 
 			a.title AS address_title,
 			a.address AS address_address,

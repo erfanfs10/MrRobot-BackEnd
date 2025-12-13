@@ -1,6 +1,9 @@
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 type CartItem struct {
 	ProductDetail
@@ -16,7 +19,7 @@ type OrderCreate struct {
 }
 
 type Order struct {
-	OrderID        *int             `json:"order_id" db:"order_id"`
+	OrderID        *int             `json:"id" db:"order_id"`
 	Amount         *string          `json:"amount" db:"order_amount"`
 	ShippingPrice  *string          `json:"shipping_price" db:"order_shipping_price"`
 	TotalAmount    *string          `json:"total_amount" db:"order_total_amount"`
@@ -25,4 +28,5 @@ type Order struct {
 	AddressTitle   *string          `json:"address_title" db:"address_title"`
 	AddressAddress *string          `json:"address_address" db:"address_address"`
 	OrderItems     *json.RawMessage `json:"order_items" db:"order_items"`
+	Created        *time.Time       `json:"created" db:"order_created"`
 }
