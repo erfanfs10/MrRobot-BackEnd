@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/erfanfs10/MrRobot-BackEnd/db"
@@ -38,6 +39,12 @@ func OrderCreate(c echo.Context) error {
 		if err != nil {
 			return utils.HandleError(c, http.StatusInternalServerError,
 			err, "server error")
+		}
+
+		_, err = db.DB.Exec(queries.ProductUpdateSell, v.Quantity, v.ID)
+		if err != nil {
+			errText := fmt.Sprintf("can not update sell product: %v", v.Title)
+			c.Set("err", errText)
 		}
 	}
 
