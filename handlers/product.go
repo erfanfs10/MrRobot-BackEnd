@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
+	"strconv"
 
 	"github.com/erfanfs10/MrRobot-BackEnd/db"
 	"github.com/erfanfs10/MrRobot-BackEnd/models"
@@ -13,11 +15,29 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+const PageSize = 10
+
 func ProductListProductType(c echo.Context) error {
 	product_type_title := c.Param("title")
+
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	if page <= 1 {
+		page = 1
+	}
+	offset := (page - 1) * PageSize
+	var total int
+	err := db.DB.Get(&total, queries.CountProducts, product_type_title)
+	totalPages := int(math.Ceil(float64(total) / float64(PageSize)))
+
 	products := []models.Product{}
-	query := queries.BuildProductPTCBQuery("product_type")
-	err := db.DB.Select(&products, query, product_type_title)
+
+	if err != nil {
+		errText := fmt.Sprintf("can not count product of type : %v", product_type_title)
+		c.Set("err", errText)
+	}
+
+	query := queries.BuildProductPTCBQuery("product_type", PageSize, offset)
+	err = db.DB.Select(&products, query, product_type_title)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return utils.HandleError(c, http.StatusNotFound, err, "product not found")
@@ -34,15 +54,28 @@ func ProductListProductType(c echo.Context) error {
 			c.Set("err", errText)
 		}
 		products[i].Attributes = attrModel
-	}	
+	}
 
-	return c.JSON(http.StatusOK, products)
+	 return c.JSON(http.StatusOK, map[string]any{
+		"items":        products,
+		"page":         page,
+		"total_pages":  totalPages,
+		"total":        total,
+	})
 }
 
 func ProductListBrand(c echo.Context) error {
 	brand_title := c.Param("title")
 	products := []models.Product{}
-	query := queries.BuildProductPTCBQuery("brand")
+
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * PageSize
+	//var totalProducts int
+
+	query := queries.BuildProductPTCBQuery("brand", PageSize, offset)
 	err := db.DB.Select(&products, query, brand_title)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -57,7 +90,15 @@ func ProductListBrand(c echo.Context) error {
 func ProductListCategory(c echo.Context) error {
 	category_title := c.Param("title")
 	products := []models.Product{}
-	query := queries.BuildProductPTCBQuery("category")
+
+	page, _ := strconv.Atoi(c.QueryParam("page"))
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * PageSize
+	//var totalProducts int
+
+	query := queries.BuildProductPTCBQuery("category", PageSize, offset)
 	err := db.DB.Select(&products, query, category_title)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
