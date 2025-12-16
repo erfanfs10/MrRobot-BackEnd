@@ -14,7 +14,7 @@ RUN go mod download
 RUN go build -o server
 
 # Expose the port your app uses
-EXPOSE 8000
+EXPOSE 8080
 
 # Command to run the binary
 CMD ["./server"]
